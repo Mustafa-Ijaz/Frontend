@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: node-frontend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: myapp
+  template:
+    metadata:
+      labels:
+        tier: frontend
+        app: myapp
+    spec:
+      containers:
+      - name: frontend
+        image: mustafa75/frontend
+        ports:
+        - containerPort: 9093
+          name: tcp
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend
+spec:
+  type:  NodePort
+  selector:
+    tier: frontend
+    app:  myapp
+  ports:
+  - protocol: TCP 
+    port:  8080
+    targetPort:  9093
+    nodePort: 31000
